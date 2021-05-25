@@ -78,23 +78,31 @@ html, body {
 
 .space.placed::before,
 .space.placed::after,
-.space .space:not(.placed):hover::before,
-.space .space:not(.placed):hover::after {
+.space:not(.placed):not(.illegal):hover::before,
+.space:not(.placed):not(.illegal):hover::after {
   content: '';
   position: absolute;
   border-radius: 50%;
   width: var(--mark-size);
   height: var(--mark-size);
-  background-color: green;
 }
 
+.board.w .space:not(.placed):not(.illegal):hover::before,
+.board.w .space:not(.placed):not(.illegal):hover::after {
+  background-color: rgba(255, 255, 255, .3);
+}
 
-.placed.b::before,
-.placed.b::after {
-  background-color: black;
+.board.b .space:not(.placed):hover::before,
+.board.b .space:not(.placed):hover::after {
+  background-color: rgba(0, 0, 0, .3);
 }
 
 .placed.w::before,
 .placed.w::after {
   background-color: white;
+}
+
+.placed.b::before,
+.placed.b::after {
+  background-color: black;
 }

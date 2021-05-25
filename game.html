@@ -2,7 +2,8 @@
 <html>
   <head>
     <title> Othello Game </title>
-    <link rel="stylesheet" type="text/css" href="styling.css"
+    <link rel="stylesheet" type="text/css" href="styling.css">
+    <script defer src="gen_board.js"> </script>
     <script defer src="game_script.js"> </script>
   </head>
 
@@ -13,8 +14,10 @@
         <button class="restart-btn"> Restart </button>
       </div>
     </header>
-    <div class="delete">
-      hello there
+    <div id="Moves Taken" class = "main-header">
+      <h2 class="main-header-text moves-taken-text"> Amount of pieces left </h2>
+    </div>
+    <div id="board" class = "board">
     </div>
   </body>
 </html>

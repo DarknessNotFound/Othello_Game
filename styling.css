@@ -5,6 +5,11 @@
   color: #777;
 }
 
+:root {
+  --cell-size: 90px;
+  --mark-size: calc(var(--cell-size) * .9)
+}
+
 html, body {
   margin: 0;
 }
@@ -25,6 +30,9 @@ html, body {
   margin-top: 0 !important;
 }
 
+.moves-taken-text {
+  text-decoration: none;
+}
 .game-btns-h {
   display: flex;
   align-items: center;
@@ -42,10 +50,51 @@ html, body {
 .restart-btn:hover {
   background-color: lightblue;
   cursor: pointer;
-  border: 2px solid darkgrey;
-  border-radius: 50%;
 }
 
-.delete {
-  height: 1000px;
+.board {
+  position: relative;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  justify-items: center;
+  align-items: center;
+  grid-template-columns: repeat(8, auto);
+}
+
+.space {
+  border: 1px solid black;
+  background-color: green;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.space.placed:hover {
+  cursor: not-allowed;
+}
+
+.space.placed::before,
+.space.placed::after,
+.space .space:not(.placed):hover::before,
+.space .space:not(.placed):hover::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  width: var(--mark-size);
+  height: var(--mark-size);
+  background-color: green;
+}
+
+
+.placed.b::before,
+.placed.b::after {
+  background-color: black;
+}
+
+.placed.w::before,
+.placed.w::after {
+  background-color: white;
 }

@@ -49,10 +49,9 @@ function swapTurn() {
 }
 
 function calcLegalPositions() {
-  spaces.filter(space => {space.classList.includes('placed')}).forEach((space, i) => {
-    console.log(i);
-  });
+  for(var i = 0; i < 64; i++) {
 
+  }
 }
 
 function calcExistingSpaces() {

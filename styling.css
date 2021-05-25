@@ -1,0 +1,51 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+
+  font-family: sans-serif;
+  color: #777;
+}
+
+html, body {
+  margin: 0;
+}
+
+.main-header {
+  position: sticky;
+  top: 0;
+  background-color: rgba(0, 0, 0, .2);
+  background-size: cover;
+  align-content: center;
+  justify-content: center;
+}
+
+.main-header-text {
+  text-align: center;
+  text-decoration: underline;
+  border: 2px rgba(255, 0, 0, 0.5);
+  margin-top: 0 !important;
+}
+
+.game-btns-h {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.restart-btn {
+  background-color: transparent;
+  border: 2px;
+  border-color: rgba(0, 0, 0, 0);
+  font-size: 100%;
+  text-align: center;
+}
+
+.restart-btn:hover {
+  background-color: lightblue;
+  cursor: pointer;
+  border: 2px solid darkgrey;
+  border-radius: 50%;
+}
+
+.delete {
+  height: 1000px;
+}

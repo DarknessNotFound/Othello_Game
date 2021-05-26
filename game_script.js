@@ -1,21 +1,54 @@
 const BLACK_CLASS = 'b';
 const WHITE_CLASS = 'w';
+const PLACED_CLASS = 'placed';
+const ILLEGAL_CLASS = 'illegal';
 
 const board = document.getElementById('board');
 const spaces = board.querySelectorAll('div.space');
+const reset_btn = document.getElementById('restart-btn');
 const l_edge_spaces = [0, 8, 16, 24, 32, 40, 48, 56];
 const r_edge_spaces = [7, 15, 23, 31, 39, 47, 55, 63];
 const u_edge_spaces = [0, 1, 2, 3, 4, 5, 6, 7];
 const d_edge_spaces = [56, 57, 58, 59, 60, 61, 62, 63];
 
+const upLeftId = 0;
+const upMidId = 1;
+const upRightId = 2;
+const rightMidId = 3;
+const lowRightId = 4;
+const lowMidId = 5;
+const lowLeftId = 6;
+const leftMidId = 7;
+
 let whiteTurn = false;
 
+reset_btn.addEventListener('click', startGame);
 startGame();
 
 function startGame() {
-  spaces.forEach(i => {
-    i.removeEventListener('click', handleClick);
-    i.addEventListener('click', handleClick, {once: true});
+  spaces.forEach((obj, index) => {
+
+    //Remove any previous placement classes
+    obj.classList.remove('placed');
+    obj.classList.remove(WHITE_CLASS);
+    obj.classList.remove(BLACK_CLASS);
+
+    //Remove then add the onClick handler
+    obj.removeEventListener('click', handleClick);
+    obj.addEventListener('click', handleClick, {once: true});
+
+    //Add starting positions
+    if(index === 27 | index === 36) {
+      obj.classList.add('placed');
+      obj.classList.add('w');
+      obj.removeEventListener('click', handleClick);
+    }
+    if(index === 35 | index === 28) {
+      obj.classList.add('placed');
+      obj.classList.add('b');
+      obj.removeEventListener('click', handleClick);
+    }
+
   });
   return;
 }
@@ -29,31 +62,99 @@ function handleClick(e) {
 }
 
 function addDisk(space) {
-  space.classList.add('placed');
+  space.classList.add(PLACED_CLASS);
   if(whiteTurn)
-    space.classList.add('w');
+    space.classList.add(WHITE_CLASS);
   else
-    space.classList.add('b');
+    space.classList.add(BLACK_CLASS);
   return;
 }
 
 function swapTurn() {
   whiteTurn = !whiteTurn;
-  board.classList.remove('b');
-  board.classList.remove('w');
+  board.classList.remove(BLACK_CLASS);
+  board.classList.remove(WHITE_CLASS);
   if(whiteTurn)
-    board.classList.add('w');
+    board.classList.add(WHITE_CLASS);
   else
-    board.classList.add('b');
+    board.classList.add(BLACK_CLASS);
+  return;
+}
+
+function removeClassFromSpaces(class_to_remove) {
+  spaces.forEach(space => {
+    space.classList.remove(class_to_remove);
+  });
   return;
 }
 
 function calcLegalPositions() {
+  removeClassFromSpaces(ILLEGAL_CLASS);
   for(var i = 0; i < 64; i++) {
+    //Doesn't need to check spots already placed.
+    if(spaces[i].classList.indexOf(PLACED_CLASS) !== -1){continue;}
 
+    //illegal class added to removeEventListener later and for no hover
+    if (!isspaceLegal(i)) {spaces[i].classList.add(ILLEGAL_CLASS);}
   }
 }
 
-function calcExistingSpaces() {
+function isLegalSpace(space_num) {
+  class_searching = (whiteTurn ? WHITE_CLASS : BLACK_CLASS);
 
+  //line_ids are from 0-7 (or 8 different lines to check)
+  for(let i = 0; i < 8; i++) {
+    if(checkLine(space_num, i)) {return true;}
+  }
+}
+
+function nextSpaceExists(space_num, line_id) {
+  //Next space exist as long as its not on an edge and thus checks for edges.
+  switch(line_id) {
+    case upLeftId:
+      if (u_edge_spaces.index(space_num) !== -1
+        & l_edge_spaces.index(space_num) !== -1)  {return false;}
+
+    case upMidId:
+      if (u_edge_spaces.index(space_num !== -1))  {return false;}
+
+    case upRightId:
+      if (u_edge_spaces.index(space_num) !== -1
+        & r_edge_spaces.index(space_num) !== -1) {return false;}
+
+    case rightMidId:
+      if (r_edge_spaces.index(space_num !== -1)) {return false;}
+
+    case lowRightId:
+      if (d_edge_spaces.index(space_num) !== -1
+      &   r_edge_spaces.index(space_num) !== -1) {return false;}
+
+    case lowMidId:
+      if (d_edge_spaces.index(space_num !== -1))  {return false;}
+
+    case lowLeftId:
+      if (d_edge_spaces.index(space_num) !== -1
+      &   l_edge_spaces.index(space_num) !== -1) {return false;}
+
+    case leftMidId:
+      if (l_edge_spaces.index(space_num !== -1))  {return false;}
+  }
+  return true; //Assumes true unless proven otherwise.
+}
+
+function checkLine(space_num, line_id) {
+  //Prevention from walking off the array.
+  if (!nextSpaceExists(space_num, line_id)) return false;
+
+  switch(line_id) {
+    case upLeftId:
+
+    case upMidId:
+    case upRightId:
+    case rightMidId:
+    case lowRightId:
+    case lowMidId:
+    case lowLeftId:
+    case leftMidId:
+  }
 }

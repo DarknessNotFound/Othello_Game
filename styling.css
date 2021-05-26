@@ -72,7 +72,8 @@ html, body {
   align-items: center;
 }
 
-.space.placed:hover {
+.space.placed:hover,
+.space.illegal:hover {
   cursor: not-allowed;
 }
 

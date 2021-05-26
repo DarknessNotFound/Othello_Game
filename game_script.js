@@ -26,6 +26,7 @@ reset_btn.addEventListener('click', startGame);
 startGame();
 
 function startGame() {
+  whiteTurn = false;
   spaces.forEach((obj, index) => {
 
     //Remove any previous placement classes
@@ -50,6 +51,8 @@ function startGame() {
     }
 
   });
+
+//calcLegalPositions();
   return;
 }
 
@@ -81,6 +84,11 @@ function swapTurn() {
   return;
 }
 
+function classExist(obj, className) {
+  if (obj.classList.contains(className)) return true;
+  return false;
+}
+
 function removeClassFromSpaces(class_to_remove) {
   spaces.forEach(space => {
     space.classList.remove(class_to_remove);
@@ -92,16 +100,14 @@ function calcLegalPositions() {
   removeClassFromSpaces(ILLEGAL_CLASS);
   for(var i = 0; i < 64; i++) {
     //Doesn't need to check spots already placed.
-    if(spaces[i].classList.indexOf(PLACED_CLASS) !== -1){continue;}
+    if(classExist(spaces[i], PLACED_CLASS))  continue;
 
     //illegal class added to removeEventListener later and for no hover
-    if (!isspaceLegal(i)) {spaces[i].classList.add(ILLEGAL_CLASS);}
+    if (!isSpaceLegal(i)) {spaces[i].classList.add(ILLEGAL_CLASS);}
   }
 }
 
-function isLegalSpace(space_num) {
-  class_searching = (whiteTurn ? WHITE_CLASS : BLACK_CLASS);
-
+function isSpaceLegal(space_num) {
   //line_ids are from 0-7 (or 8 different lines to check)
   for(let i = 0; i < 8; i++) {
     if(checkLine(space_num, i)) {return true;}
@@ -112,49 +118,91 @@ function nextSpaceExists(space_num, line_id) {
   //Next space exist as long as its not on an edge and thus checks for edges.
   switch(line_id) {
     case upLeftId:
-      if (u_edge_spaces.index(space_num) !== -1
-        & l_edge_spaces.index(space_num) !== -1)  {return false;}
+      if (u_edge_spaces.indexOf(space_num) !== -1
+        & l_edge_spaces.indexOf(space_num) !== -1)  {return false;}
 
     case upMidId:
-      if (u_edge_spaces.index(space_num !== -1))  {return false;}
+      if (u_edge_spaces.indexOf(space_num !== -1))  {return false;}
 
     case upRightId:
-      if (u_edge_spaces.index(space_num) !== -1
-        & r_edge_spaces.index(space_num) !== -1) {return false;}
+      if (u_edge_spaces.indexOf(space_num) !== -1
+        & r_edge_spaces.indexOf(space_num) !== -1) {return false;}
 
     case rightMidId:
-      if (r_edge_spaces.index(space_num !== -1)) {return false;}
+      if (r_edge_spaces.indexOf(space_num !== -1)) {return false;}
 
     case lowRightId:
-      if (d_edge_spaces.index(space_num) !== -1
-      &   r_edge_spaces.index(space_num) !== -1) {return false;}
+      if (d_edge_spaces.indexOf(space_num) !== -1
+      &   r_edge_spaces.indexOf(space_num) !== -1) {return false;}
 
     case lowMidId:
-      if (d_edge_spaces.index(space_num !== -1))  {return false;}
+      if (d_edge_spaces.indexOf(space_num !== -1))  {return false;}
 
     case lowLeftId:
-      if (d_edge_spaces.index(space_num) !== -1
-      &   l_edge_spaces.index(space_num) !== -1) {return false;}
+      if (d_edge_spaces.indexOf(space_num) !== -1
+      &   l_edge_spaces.indexOf(space_num) !== -1) {return false;}
 
     case leftMidId:
-      if (l_edge_spaces.index(space_num !== -1))  {return false;}
+      if (l_edge_spaces.indexOf(space_num !== -1))  {return false;}
   }
   return true; //Assumes true unless proven otherwise.
 }
 
-function checkLine(space_num, line_id) {
-  //Prevention from walking off the array.
-  if (!nextSpaceExists(space_num, line_id)) return false;
+function findNextSpace(space_num, line_id) {
+  let nextSpace = 0;
 
   switch(line_id) {
     case upLeftId:
-
+      nextSpace = space_num - 9;
     case upMidId:
+      nextSpace = space_num - 8;
     case upRightId:
+      nextSpace = space_num - 7;
     case rightMidId:
+      nextSpace = space_num + 1;
     case lowRightId:
+      nextSpace = space_num + 9;
     case lowMidId:
+      nextSpace = space_num + 8;
     case lowLeftId:
+      nextSpace = space_num + 7;
     case leftMidId:
+      nextSpace = space_num - 1;
+  }
+  return nextSpace;
+}
+
+function checkLine(space_num, line_id) {
+
+  //Prevention from walking off the array.
+  if (!nextSpaceExists(space_num, line_id)) return false;
+
+  //Use this to check the next space.
+  let nextSpace = findNextSpace(space_num, line_id);
+
+  //The end of the line should be a placed spot to be legal.
+  if (classExist(spaces[nextSpace], PLACED_CLASS)) return false;
+
+  if (whiteTurn) {
+    //First space will be blank and thus the next can't be the same color.
+    if (!classExist(spaces[space_num], BLANK_CLASS) &
+        classExist(spaces[nextSpace], WHITE_CLASS)) return false;
+
+    if (classExist(spaces[nextSpace], BLACK_CLASS))
+      return checkLine(nextSpace, line_id);
+
+    if (classExist(spaces[nextSpace], WHITE_CLASS))
+      return true;
+  }
+  else {
+    //First space will be blank and thus the next can't be the same color.
+    if (!classExist(spaces[space_num], BLANK_CLASS) &
+        classExist(spaces[nextSpace], BLACK_CLASS)) return false;
+    console.log(space_num);
+    if (classExist(spaces[nextSpace], WHITE_CLASS))
+      return checkLine(nextSpace, line_id);
+
+    if (classExist(spaces[nextSpace], BLACK_CLASS))
+      return true;
   }
 }

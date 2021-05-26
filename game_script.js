@@ -59,7 +59,7 @@ function startGame() {
 function handleClick(e) {
   const space = e.target;
   addDisk(space);
-  flipDisks(space);
+  flipDisksAfterPlacement(space);
   swapTurn();
   calcLegalPositions();
   return;
@@ -97,6 +97,21 @@ function flipDisksAfterPlacement(space_num) {
       flipDisksInLine(space_num, lineDir);
     }
   }
+  return;
+}
+
+function flipDisksInLine(space_num, lineDir) {
+  var nextTile = findNextSpace(space_num, lineDir);
+
+  if( (classExist(spaces[nextTile], WHITE_CLASS) & whiteTurn)
+    | (classExist(spaces[nextTile], BLACK_CLASS) & !whiteTurn) ) {
+      flipIndividualDisk(spaces[space_num]);
+    }
+
+  if( !(classExist(spaces[nextTile], WHITE_CLASS) & whiteTurn)
+    & !(classExist(spaces[nextTile], BLACK_CLASS) & !whiteTurn) ) {
+      flipDisksInLine(nextTile, lineDir);
+    }
   return;
 }
 
@@ -226,7 +241,7 @@ function checkLine(space_num, line_id) {
 
   //Use this to check the next space.
   let nextSpace = findNextSpace(space_num, line_id);
-
+  
   //The end of the line should be a placed spot to be legal.
   if (!classExist(spaces[nextSpace], PLACED_CLASS)) return false;
 

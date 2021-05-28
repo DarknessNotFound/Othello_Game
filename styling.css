@@ -14,7 +14,7 @@ html, body {
   margin: 0;
 }
 
-.main-header {
+#main-header {
   position: sticky;
   top: 0;
   background-color: rgba(0, 0, 0, .2);
@@ -30,8 +30,23 @@ html, body {
   margin-top: 0 !important;
 }
 
-.moves-taken-text {
-  text-decoration: none;
+#wrapper {
+  display: flex;
+  grid-template-columns: repeat(3, auto);
+  align-items: center;
+  justify-content: center;
+  span;
+}
+
+.disk-counter {
+}
+
+.b-counter {
+  float: left;
+}
+
+.w-counter {
+  float: right;
 }
 .game-btns-h {
   display: flex;

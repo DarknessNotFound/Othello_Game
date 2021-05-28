@@ -2,9 +2,11 @@ const BLACK_CLASS = 'b';
 const WHITE_CLASS = 'w';
 const PLACED_CLASS = 'placed';
 const ILLEGAL_CLASS = 'illegal';
+let TARGETCLASS = 'target';
 
 const board = document.getElementById('board');
-const spaces = board.querySelectorAll('div.space');
+const spaces_nodeList = board.querySelectorAll('div.space')
+const spaces = Array.from(spaces_nodeList);
 const reset_btn = document.getElementById('restart-btn');
 const l_edge_spaces = [0, 8, 16, 24, 32, 40, 48, 56];
 const r_edge_spaces = [7, 15, 23, 31, 39, 47, 55, 63];
@@ -56,10 +58,15 @@ function startGame() {
   return;
 }
 
+function containsTarget(obj) {
+  return classExist(obj, TARGETCLASS);
+}
+
 function handleClick(e) {
   const space = e.target;
+  const space_index =  spaces.indexOf(space);//spaceIndex(space);
   addDisk(space);
-  flipDisksAfterPlacement(space);
+  flipDisksAfterPlacement(space_index);
   swapTurn();
   calcLegalPositions();
   return;
@@ -101,10 +108,11 @@ function flipDisksAfterPlacement(space_num) {
 }
 
 function flipDisksInLine(space_num, lineDir) {
-  var nextTile = findNextSpace(space_num, lineDir);
 
-  if( (classExist(spaces[nextTile], WHITE_CLASS) & whiteTurn)
-    | (classExist(spaces[nextTile], BLACK_CLASS) & !whiteTurn) ) {
+  let nextTile = findNextSpace(space_num, lineDir);
+
+  if( !(classExist(spaces[space_num], WHITE_CLASS) & whiteTurn)
+    & !(classExist(spaces[space_num], BLACK_CLASS) & !whiteTurn) ) {
       flipIndividualDisk(spaces[space_num]);
     }
 
@@ -171,40 +179,58 @@ function isSpaceLegal(space_num) {
 
 function nextSpaceExists(space_num, line_id) {
   //Next space exist as long as its not on an edge and thus checks for edges.
+  let spaceDoesExist = false;
+
   switch(line_id) {
     case upLeftId:
-      if ((u_edge_spaces.indexOf(space_num) !== -1)
-        | (l_edge_spaces.indexOf(space_num) !== -1))  return false;
+      if ((u_edge_spaces.indexOf(space_num) === -1)
+        & (l_edge_spaces.indexOf(space_num) === -1))
+          spaceDoesExist = true;
+      break;
 
     case upMidId:
-      if (u_edge_spaces.indexOf(space_num) !== -1)  return false;
+      if (u_edge_spaces.indexOf(space_num) === -1)
+        spaceDoesExist = true;
+      break;
 
     case upRightId:
-      if (u_edge_spaces.indexOf(space_num) !== -1
-        | r_edge_spaces.indexOf(space_num) !== -1) return false;
+      if (u_edge_spaces.indexOf(space_num) === -1
+        & r_edge_spaces.indexOf(space_num) === -1)
+          spaceDoesExist = true;
+      break;
 
     case rightMidId:
-      if (r_edge_spaces.indexOf(space_num) !== -1) return false;
+      if (r_edge_spaces.indexOf(space_num) === -1)
+        spaceDoesExist = true;
+      break;
 
     case lowRightId:
-      if (d_edge_spaces.indexOf(space_num) !== -1
-      |   r_edge_spaces.indexOf(space_num) !== -1) return false;
+      if (d_edge_spaces.indexOf(space_num) === -1
+      &   r_edge_spaces.indexOf(space_num) === -1)
+        spaceDoesExist = true;
+      break;
 
     case lowMidId:
-      if (d_edge_spaces.indexOf(space_num) !== -1)  return false;
+      if (d_edge_spaces.indexOf(space_num) === -1)
+        spaceDoesExist = true;
+      break;
 
     case lowLeftId:
-      if (d_edge_spaces.indexOf(space_num) !== -1
-      |   l_edge_spaces.indexOf(space_num) !== -1) return false;
+      if (d_edge_spaces.indexOf(space_num) === -1
+      &   l_edge_spaces.indexOf(space_num) === -1)
+        spaceDoesExist = true;
+      break;
 
     case leftMidId:
-      if (l_edge_spaces.indexOf(space_num) !== -1)  return false;
+      if (l_edge_spaces.indexOf(space_num) === -1)
+        spaceDoesExist = true;
+      break;
   }
-  return true; //Assumes true unless proven otherwise.
+  return spaceDoesExist; //Assumes true unless proven otherwise.
 }
 
 function findNextSpace(space_num, line_id) {
-  var nextSpace = -1;
+  let nextSpace = -1;
 
   switch(line_id) {
     case upLeftId:
@@ -241,7 +267,7 @@ function checkLine(space_num, line_id) {
 
   //Use this to check the next space.
   let nextSpace = findNextSpace(space_num, line_id);
-  
+
   //The end of the line should be a placed spot to be legal.
   if (!classExist(spaces[nextSpace], PLACED_CLASS)) return false;
 

@@ -6,8 +6,11 @@
 }
 
 :root {
-  --cell-size: 90px;
-  --mark-size: calc(var(--cell-size) * .9)
+  --cell-size: 5vw;
+  --mark-size: calc(var(--cell-size) * .9);
+  --center-width: 50vw;
+  --side-total-width: calc(100vw - var(--center-width));
+  --side-width: calc(var(--side-total-width) / 2);
 }
 
 html, body {
@@ -31,11 +34,11 @@ html, body {
 }
 
 #wrapper {
-  display: flex;
-  grid-template-columns: repeat(3, auto);
-  align-items: center;
-  justify-content: center;
-  span;
+  display: grid;
+  grid-template-columns: var(--side-width)
+                         var(--center-width)
+                         var(--side-width);
+  height: var(--body-height);
 }
 
 .disk-counter {
@@ -67,14 +70,14 @@ html, body {
   cursor: pointer;
 }
 
-.board {
+#board {
   position: relative;
   display: grid;
   justify-content: center;
   align-content: center;
-  justify-items: center;
   align-items: center;
   grid-template-columns: repeat(8, auto);
+  padding-top: 2vh;
 }
 
 .space {

@@ -183,56 +183,48 @@ function nextSpaceExists(space_num, line_id) {
 
   switch(line_id) {
     case upLeftId:
-      if ((u_edge_spaces.indexOf(space_num) == -1)
-        & (l_edge_spaces.indexOf(space_num) == -1)) {
+      if ((u_edge_spaces.indexOf(space_num) === -1)
+        & (l_edge_spaces.indexOf(space_num) === -1))
           spaceDoesExist = true;
-          break;
-        }
+      break;
 
     case upMidId:
-      if (u_edge_spaces.indexOf(space_num) === -1)  {
+      if (u_edge_spaces.indexOf(space_num) === -1)
         spaceDoesExist = true;
-        break;
-      }
+      break;
 
     case upRightId:
       if (u_edge_spaces.indexOf(space_num) === -1
-        & r_edge_spaces.indexOf(space_num) === -1) {
+        & r_edge_spaces.indexOf(space_num) === -1)
           spaceDoesExist = true;
-          break;
-        }
+      break;
 
     case rightMidId:
-      if (r_edge_spaces.indexOf(space_num) === -1) {
+      if (r_edge_spaces.indexOf(space_num) === -1)
         spaceDoesExist = true;
-        break;
-      }
+      break;
 
     case lowRightId:
       if (d_edge_spaces.indexOf(space_num) === -1
-      &   r_edge_spaces.indexOf(space_num) === -1) {
+      &   r_edge_spaces.indexOf(space_num) === -1)
         spaceDoesExist = true;
-        break;
-      }
+      break;
 
     case lowMidId:
-      if (d_edge_spaces.indexOf(space_num) === -1)  {
+      if (d_edge_spaces.indexOf(space_num) === -1)
         spaceDoesExist = true;
-        break;
-      }
+      break;
 
     case lowLeftId:
       if (d_edge_spaces.indexOf(space_num) === -1
-      &   l_edge_spaces.indexOf(space_num) === -1) {
+      &   l_edge_spaces.indexOf(space_num) === -1)
         spaceDoesExist = true;
-        break;
-      }
+      break;
 
     case leftMidId:
-      if (l_edge_spaces.indexOf(space_num) === -1)  {
+      if (l_edge_spaces.indexOf(space_num) === -1)
         spaceDoesExist = true;
-        break;
-      }
+      break;
   }
   return spaceDoesExist; //Assumes true unless proven otherwise.
 }

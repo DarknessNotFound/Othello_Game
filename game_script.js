@@ -5,9 +5,21 @@ const ILLEGAL_CLASS = 'illegal';
 let TARGETCLASS = 'target';
 
 const board = document.getElementById('board');
-const spaces_nodeList = board.querySelectorAll('div.space')
+const turn_tracker = document.getElementById('turn-tracker');
+
+const spaces_nodeList = board.querySelectorAll('div.space');
 const spaces = Array.from(spaces_nodeList);
+
+const w_counter_grid_nodeList =
+       document.getElementById('w-counter-grid').querySelectorAll('div.space');
+const w_counter_grid_spaces = Array.from(w_counter_grid_nodeList);
+
+const b_counter_grid_nodeList =
+       document.getElementById('b-counter-grid').querySelectorAll('div.space');
+const b_counter_grid_spaces = Array.from(b_counter_grid_nodeList);
+
 const reset_btn = document.getElementById('restart-btn');
+
 const l_edge_spaces = [0, 8, 16, 24, 32, 40, 48, 56];
 const r_edge_spaces = [7, 15, 23, 31, 39, 47, 55, 63];
 const u_edge_spaces = [0, 1, 2, 3, 4, 5, 6, 7];
@@ -58,6 +70,8 @@ function startGame() {
   return;
 }
 
+
+
 function containsTarget(obj) {
   return classExist(obj, TARGETCLASS);
 }
@@ -69,20 +83,100 @@ function handleClick(e) {
   flipDisksAfterPlacement(space_index);
   swapTurn();
   calcLegalPositions();
+  if(!canPlace()) {
+    cantPlaceMsg();
+    swapTurn();
+    calcLegalPositions();
+    if(checkGameOver())
+      gameOver();
+  }
   return;
 }
 
-function updateDiskCounter() {
-  let b_count = 0;
-  let w_count = 0;
+function gameOver() {
+  let alertMsg = "";
+  alertMsg += "Game over!  ----  ";
+  alertMsg = (countDisk(count_White=true) > countDisk(count_White=false) ?
+              "White" : "Black");
+  alertMsg += " won!";
+  alert(alertMsg);
+
+}
+
+function checkGameOver() {
+  if(!canPlace()) {
+    swapTurn();
+    calcLegalPositions();
+    if(!canPlace())
+      return true;
+  }
+  return false;
+}
+
+function canPlace() {
+  let legal_move_counter = 0;
+  for(let i = 0; i < 64; i++) {
+    if (!classExist(spaces[i], PLACED_CLASS)
+    & !classExist(spaces[i], ILLEGAL_CLASS))
+    legal_move_counter++;
+  }
+  console.log(legal_move_counter);
+  if(legal_move_counter === 0)
+    return false;
+  return true;
+}
+
+function cantPlaceMsg() {
+  let msg = "";
+  if(whiteTurn)
+    msg += "White ";
+  else
+    msg += "Black ";
+  msg += "can\'t move, not swapping sides...";
+  alert(msg);
+  return;
+}
+
+function countDisk(count_White = true) {
+  let count = 0;
+  let class_using = (count_White ? WHITE_CLASS : BLACK_CLASS);
+
   spaces.forEach(i => {
-    if(classExist(i, BLACK_CLASS))
-      b_count++;
-    if(classExist(i, WHITE_CLASS))
-      w_count++;
+    if(classExist(i, class_using))
+      count++;
   });
-  document.getElementById('b-counter').innerHTML = b_count;
-  document.getElementById('w-counter').innerHTML = w_count;
+  return count;
+}
+
+function updateDiskCounter() {
+  let b_count = countDisk(count_White = false);
+  let w_count = countDisk(count_Black = true);
+
+  document.getElementById('b-counter-text').innerHTML = b_count;
+  document.getElementById('w-counter-text').innerHTML = w_count;
+
+  updateDiskCounterDisplay(w_counter_grid_spaces, w_count, is_black=false);
+  updateDiskCounterDisplay(b_counter_grid_spaces, b_count, is_black=true);
+  return;
+}
+
+function updateDiskCounterDisplay(diskArr, num_disks, is_black) {
+  for(let i = 0; i < 64; i++) {
+    diskArr[i].classList.remove('blank');
+    diskArr[i].classList.remove('w');
+    diskArr[i].classList.remove('b');
+
+    if(i < num_disks) {
+      if(is_black)
+        diskArr[i].classList.add('b');
+      else
+        diskArr[i].classList.add('w');
+    } else {
+      diskArr[i].classList.add('blank');
+    }
+  }
+
+  return;
 }
 
 function addDisk(space) {
@@ -141,10 +235,14 @@ function swapTurn() {
   whiteTurn = !whiteTurn;
   board.classList.remove(BLACK_CLASS);
   board.classList.remove(WHITE_CLASS);
-  if(whiteTurn)
+  if(whiteTurn) {
     board.classList.add(WHITE_CLASS);
-  else
+    turn_tracker.innerHTML = "White Turn";
+  }
+  else {
+    turn_tracker.innerHTML = "Black Turn";
     board.classList.add(BLACK_CLASS);
+  }
   return;
 }
 

@@ -11,17 +11,20 @@
     <header id="main-header">
       <h1> Othello Game </h1>
     </header>
-    
+
     <div id="restart-btn-container">
       <button id="restart-btn" class="restart-btn"> Restart </button>
     </div>
+
+    <div id="turn-tracker-container"> <div id="turn-tracker"> Black Turn </div> </div>
 
     <div id="wrapper">
       <div class="disk-counter-container">
         <h2> Black Disks </h2>
         <div class="disk-counter b-counter">
-          <p id="b-counter"> 2 Disks </p>
+          <p id="b-counter-text"> Disk Counter </p>
         </div>
+        <div id="b-counter-grid">  </div>
       </div>
 
       <div id="board" class = "board b"> </div>
@@ -29,8 +32,9 @@
       <div class="disk-counter-container">
         <h2> White Disks </h2>
          <div class="disk-counter w-counter">
-           <p id="w-counter"> White Disks </p>
+           <p id="w-counter-text"> Disk Counter </p>
         </div>
+        <div id="w-counter-grid">  </div>
       </div>
     </div>
   </body>

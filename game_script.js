@@ -1,3 +1,6 @@
+//This controls the state of the board and game as its play. The bulk of the
+//code is in this file.
+//NOTE: 'b' and 'w' represent black and white respectivaly.
 const BLACK_CLASS = 'b';
 const WHITE_CLASS = 'w';
 const PLACED_CLASS = 'placed';
@@ -6,7 +9,9 @@ let TARGETCLASS = 'target';
 
 const board = document.getElementById('board');
 const turn_tracker = document.getElementById('turn-tracker');
+const reset_btn = document.getElementById('restart-btn');
 
+//Code can break if in a nodeList vs an Array.
 const spaces_nodeList = board.querySelectorAll('div.space');
 const spaces = Array.from(spaces_nodeList);
 
@@ -18,13 +23,14 @@ const b_counter_grid_nodeList =
        document.getElementById('b-counter-grid').querySelectorAll('div.space');
 const b_counter_grid_spaces = Array.from(b_counter_grid_nodeList);
 
-const reset_btn = document.getElementById('restart-btn');
-
+//Only the spaces on the edges won't exist if you go in the wrong direction.
+//These are used to prevent that.
 const l_edge_spaces = [0, 8, 16, 24, 32, 40, 48, 56];
 const r_edge_spaces = [7, 15, 23, 31, 39, 47, 55, 63];
 const u_edge_spaces = [0, 1, 2, 3, 4, 5, 6, 7];
 const d_edge_spaces = [56, 57, 58, 59, 60, 61, 62, 63];
 
+//Set-up id's to make looping through the directions easy w/ a switch-case.
 const upLeftId = 0;
 const upMidId = 1;
 const upRightId = 2;
@@ -34,11 +40,16 @@ const lowMidId = 5;
 const lowLeftId = 6;
 const leftMidId = 7;
 
+//Controls whose turn it is. Black always goes first.
 let whiteTurn = false;
 
+//Code to start the program.
 reset_btn.addEventListener('click', startGame);
 startGame();
 
+//startGame() resets the beginning board state.
+//Pre: None.
+//Post: All pieces removed, add beginning positions, set whiteTurn to be false.
 function startGame() {
   if(whiteTurn) swapTurn();
   spaces.forEach((obj, index) => {
@@ -70,12 +81,17 @@ function startGame() {
   return;
 }
 
-
-
+//containsTarget() checks if the obj has the TARGETCLASS.
+//Pre: Obj is an object with a classList.
+//Post: Returns if the object has the TARGETCLASS.
 function containsTarget(obj) {
   return classExist(obj, TARGETCLASS);
 }
 
+//handleClick(e) is the function applied to all the empty, legal board positions
+//Pre: the space shouldn't have a piece and should be a legal spot to place.
+//Post: Adds the pieces, flips all the nessessary disks, the turn is swapped,
+//      legalPositions are recalulated, and checks if the game has ended.
 function handleClick(e) {
   const space = e.target;
   const space_index =  spaces.indexOf(space);//spaceIndex(space);
@@ -83,7 +99,8 @@ function handleClick(e) {
   flipDisksAfterPlacement(space_index);
   swapTurn();
   calcLegalPositions();
-  if(!canPlace()) {
+
+  if(!canPlace()) {  //If a player can't place a piece then their turn is passed
     cantPlaceMsg();
     swapTurn();
     calcLegalPositions();

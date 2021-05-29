@@ -9,15 +9,29 @@
 
   <body>
     <header id="main-header">
-      <h1 class="main-header-text"> Othello Game </h1>
-      <div class="game-btns-h">
-        <button id="restart-btn" class="restart-btn"> Restart </button>
-      </div>
+      <h1> Othello Game </h1>
     </header>
+    
+    <div id="restart-btn-container">
+      <button id="restart-btn" class="restart-btn"> Restart </button>
+    </div>
+
     <div id="wrapper">
-      <div class="disk-counter"> Black Turn </div>
+      <div class="disk-counter-container">
+        <h2> Black Disks </h2>
+        <div class="disk-counter b-counter">
+          <p id="b-counter"> 2 Disks </p>
+        </div>
+      </div>
+
       <div id="board" class = "board b"> </div>
-      <div class="disk-counter"> White Turn </div>
+
+      <div class="disk-counter-container">
+        <h2> White Disks </h2>
+         <div class="disk-counter w-counter">
+           <p id="w-counter"> White Disks </p>
+        </div>
+      </div>
     </div>
   </body>
 </html>

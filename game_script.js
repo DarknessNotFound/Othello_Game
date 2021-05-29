@@ -53,7 +53,7 @@ function startGame() {
     }
 
   });
-
+  updateDiskCounter();
   calcLegalPositions();
   return;
 }
@@ -70,6 +70,19 @@ function handleClick(e) {
   swapTurn();
   calcLegalPositions();
   return;
+}
+
+function updateDiskCounter() {
+  let b_count = 0;
+  let w_count = 0;
+  spaces.forEach(i => {
+    if(classExist(i, BLACK_CLASS))
+      b_count++;
+    if(classExist(i, WHITE_CLASS))
+      w_count++;
+  });
+  document.getElementById('b-counter').innerHTML = b_count;
+  document.getElementById('w-counter').innerHTML = w_count;
 }
 
 function addDisk(space) {
@@ -104,6 +117,7 @@ function flipDisksAfterPlacement(space_num) {
       flipDisksInLine(space_num, lineDir);
     }
   }
+  updateDiskCounter();
   return;
 }
 

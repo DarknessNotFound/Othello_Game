@@ -8,6 +8,7 @@
 :root {
   --cell-size: 5vw;
   --mark-size: calc(var(--cell-size) * .9);
+  --header-height: 10vh;
   --center-width: 50vw;
   --side-total-width: calc(100vw - var(--center-width));
   --side-width: calc(var(--side-total-width) / 2);
@@ -18,19 +19,44 @@ html, body {
 }
 
 #main-header {
-  position: sticky;
-  top: 0;
-  background-color: rgba(0, 0, 0, .2);
-  background-size: cover;
-  align-content: center;
+  display: flex;
   justify-content: center;
+  align-items: center;
+  top: 0;
+  width: 100%;
+  height: var(--header-height);
+  background-color: lightgrey;
+  text-align: center;
 }
 
-.main-header-text {
+h1 {
+  position: static;
   text-align: center;
   text-decoration: underline;
-  border: 2px rgba(255, 0, 0, 0.5);
-  margin-top: 0 !important;
+  padding: 0;
+}
+
+#restart-btn-container {
+  display: flex;
+  padding-top: 1vh;
+  width: 100vw;
+  justify-content: center;
+  align-items: center;
+}
+
+#restart-btn {
+  position: flex;
+  width: 10vw;
+  background-color: lightgrey;
+  border-color: rgba(50, 50, 50, 50);
+  font-size: 90%;
+  text-align: center;
+  color: black;
+}
+
+#restart-btn:hover {
+  background-color: lightblue;
+  cursor: pointer;
 }
 
 #wrapper {
@@ -38,37 +64,39 @@ html, body {
   grid-template-columns: var(--side-width)
                          var(--center-width)
                          var(--side-width);
-  height: var(--body-height);
+}
+
+h2 {
+  grid-column: 2;
+  height: 5%;
+}
+
+.disk-counter-container {
+  display: grid;
+  grid-template-rows: auto 75%;
+  grid-template-columns: 25% auto 25%;
 }
 
 .disk-counter {
+  grid-row: 2;
+  grid-column: 2;
 }
 
 .b-counter {
-  float: left;
+
 }
 
 .w-counter {
-  float: right;
+
 }
+
+
 .game-btns-h {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.restart-btn {
-  background-color: transparent;
-  border: 2px;
-  border-color: rgba(0, 0, 0, 0);
-  font-size: 100%;
-  text-align: center;
-}
-
-.restart-btn:hover {
-  background-color: lightblue;
-  cursor: pointer;
-}
 
 #board {
   position: relative;

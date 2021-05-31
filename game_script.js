@@ -137,7 +137,6 @@ function canPlace() {
     & !classExist(spaces[i], ILLEGAL_CLASS))
     legal_move_counter++;
   }
-  console.log(legal_move_counter);
   if(legal_move_counter === 0)
     return false;
   return true;

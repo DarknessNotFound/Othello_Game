@@ -9,23 +9,21 @@ function Board(side_len) {
   this.side_len = side_len || 8;
   this.board_size = side_len * side_len;
   this.spaces = [];
-  
+
   this.func_temp = function () {
     console.log("HI");
   }
-
-
 }
+Board.prototype.constructor = Board;
 
 Board.prototype.make_spaces = function() {
   this.spaces = [];
   for(let i = 0; i < this.board_size; i++) {
-    spaces.push(new Space());
+    this.spaces.push(new Space());
   }
-  return;
+  return true;
 }
 
-Board.prototype.constructor = Board;
 
 var main_board = new Board(8);
 

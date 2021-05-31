@@ -1,29 +1,35 @@
-function Space(placed, b_space) {
+function Space(id = 0, placed, b_space) {
+  this.id = id;
   this.placed = placed || false;
   this.b_space = b_space || true;
 }
 Space.prototype.constructor = Space;
 
-function Board(side_len) {
+function Board(side_len, b_turn) {
   Space.call(this);
   this.side_len = side_len || 8;
   this.board_size = side_len * side_len;
   this.spaces = [];
+  this.b_turn = b_turn || true;
 
-  this.func_temp = function () {
-    console.log("HI");
+  this.make_spaces = function() {
+    this.spaces = [];
+    for(let i = 0; i < this.board_size; i++) {
+      this.spaces.push(new Space(i));
+    }
+    return true;
   }
+
+  this.place_disk = function (id) {
+    if(this.legalSpace(id)) {
+      this.spaces[id].placed = true;
+      this.spaces[id].b_space = this.b_turn;
+      this.flipDisksInLine(id);
+    }
+  }
+
 }
 Board.prototype.constructor = Board;
-
-Board.prototype.make_spaces = function() {
-  this.spaces = [];
-  for(let i = 0; i < this.board_size; i++) {
-    this.spaces.push(new Space());
-  }
-  return true;
-}
-
 
 var main_board = new Board(8);
 

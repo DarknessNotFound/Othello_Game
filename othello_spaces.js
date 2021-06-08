@@ -1,3 +1,8 @@
+PLACED_CLASS = 'placed';
+BLACK_CLASS = 'b';
+WHITE_CLASS = 'w';
+BLANK_CLASS = 'blank';
+
 function Space(id = 0, placed, b_space) {
   this.id = id;
   this.placed = placed || false;
@@ -11,7 +16,7 @@ function Board(side_len, b_turn) {
   this.board_size = side_len * side_len;
   this.spaces = [];
   this.b_turn = b_turn || true;
-  
+
   //Alternating between black and white spaces (starting with black).
   this.initialSpaces = [28, 27, 35, 36];
 
@@ -56,6 +61,7 @@ var dir_ids = { //directional ids
 };
 
 Board.prototype.legalSpace = function(id, direction) {
+  return true;
   let legalSpace = true;
   switch (direction) {
     case dir_ids.up_left:
@@ -113,7 +119,7 @@ Board.prototype.set_initial_board_state = function() {
 
   this.initialSpaces.forEach((space, index) => {
     this.spaces[space].placed = true;
-    this.spaces[space].b_side = ( (index % 2) === 0);
+    this.spaces[space].b_space = ( (index % 2) === 0);
   });
 
   return true;
@@ -124,8 +130,44 @@ Board.prototype.place_disk = function (id) {
     this.spaces[id].placed = true;
     this.spaces[id].b_space = this.b_turn;
     this.flipDisksInLine(id);
+    this.updateBoard();
   }
 }
 
+Board.prototype.flipDisksInLine = function (id) {
+  return true;
+}
 
-var main_board = new Board(8);
+Board.prototype.initialBoardToHTML = function(src) {
+  this.spaces.forEach((space) => {
+    const new_space = document.createElement('li');
+    new_space.id = space.id;
+    new_space.classList.add('space');
+    if(space.placed) {
+      new_space.classList.add(PLACED_CLASS);
+      if(space.b_space)
+        new_space.classList.add(BLACK_CLASS);
+      else
+        new_space.classList.add(WHITE_CLASS);
+    } else {
+      new_space.classList.add(BLANK_CLASS);
+    }
+
+    src.appendChild(new_space);
+  });
+
+}
+
+Board.prototype.updateBoard = function() {
+  board_ele = document.getElementById('board');
+  console.log(board_ele);
+
+  this.spaces.forEach((item, index) => {
+    /*space_ele = board_ele.getChildById(index);
+    if(item.placed)
+      space_ele.classList.add(PLACED_CLASS);
+    else
+      space_ele.classList.remove(PLACED_CLASS);*/
+  });
+
+}
